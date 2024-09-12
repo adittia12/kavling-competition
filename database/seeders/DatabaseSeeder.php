@@ -92,7 +92,11 @@ class DatabaseSeeder extends Seeder
         ], [
             'name' => 'Farah Fitria Rahmayanti',
             'position' => 'Direktur Digital Business',
-            'photo' => 'direksi/farah_fitria_rahmayanti.jpg'
+            'photo' => 'direksi/farah_fitria_rahmayanti.png'
+        ], [
+            'name' => 'Panitia',
+            'position' => 'Panitia Garden',
+            'photo' =>'null'
         ]];
 
         foreach ($directors as $value) {
@@ -107,7 +111,7 @@ class DatabaseSeeder extends Seeder
             ['name_parameter' => 'Sustainable'],
             ['name_parameter' => '3R'],
             ['name_parameter' => 'Estetika'],
-            ['name_parameter' => 'AKHLAK'],
+            ['name_parameter' => 'Vidio'],
         ];
 
         foreach ($parameter as $value) {

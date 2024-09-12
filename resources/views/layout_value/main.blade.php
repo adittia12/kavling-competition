@@ -4,9 +4,12 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Sistem Penilaian</title>
+    <title>@yield('title')</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.2.6/dist/cdn.min.js" defer></script>
+    @vite('resources/sass/app.scss')
     <style>
         body {
             background-color: #f8f9fa;
@@ -48,12 +51,7 @@
 
         .card-img-top {
             height: 200px;
-            object-fit: contain;
-            /* Mengubah cover menjadi contain */
-            object-position: top;
-            /* Memastikan bagian atas gambar ditampilkan */
-            width: 100%;
-            /* Memastikan gambar menyesuaikan lebar container */
+            object-fit: cover;
         }
 
         .card-title {
@@ -74,6 +72,7 @@
             color: #4b0082;
         }
     </style>
+    @yield('style')
 </head>
 
 <body>
@@ -95,26 +94,19 @@
                 </div>
             </div>
         </div>
-        <div class="row justify-content-center mt-3">
-            @foreach ($dataDireksi as $item)
-                <div class="col-md-6 col-lg-4 game-card">
-                    <div class="card">
-                        <img src="{{ asset('storage/' . $item->photo) }}" class="card-img-top"
-                            alt="{{ $item->name }}">
-                        <div class="card-body text-center">
-                            <h5 class="card-title">{{ $item->name }}</h5>
-                            <p class="card-text">{{ $item->position }}</p>
-                            <a href="{{ route('kavling_data', ['id' => $item->id]) }}"
-                                class="btn btn-primary">Penilaian</a>
-                        </div>
-                    </div>
-                </div>
-            @endforeach
-        </div>
+
+        <section class="mb-3">
+            @include('sweetalert::alert')
+            @yield('content')
+        </section>
     </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
     </script>
+    @vite('resources/js/app.js')
+    @yield('script')
 </body>
 
 </html>

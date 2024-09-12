@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DisplayCompetitionController;
 use App\Http\Controllers\Master\DirectorController;
 use App\Http\Controllers\Master\KavlingController;
 use App\Http\Controllers\Master\ValueParameterController;
@@ -21,6 +22,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::controller(DisplayCompetitionController::class)->group(function() {
+    Route::get('/', 'displayDireksi')->name('display_values');
+    Route::get('/display_kavling/{id}', 'displayKavling')->name('kavling_data');
+    Route::get('/penilaian_kavling/{id_kavling}/{id_direksi}', 'displayPenilaian')->name('penilaian_garden');
+    Route::post('store_penilaian/{dir_id}', 'storePenilaian')->name('store_value');
+});
+
 Auth::routes();
 
 Route::middleware('auth')->group(function() {
@@ -31,4 +39,9 @@ Route::middleware('auth')->group(function() {
     Route::resource('/parameter', ValueParameterController::class);
 
     Route::resource('/transaction', TransactionValueController::class);
+    Route::controller(TransactionValueController::class)->group(function() {
+        Route::get('display_rank', 'displayRank')->name('display_peringkat');
+        Route::get('value_transaction', 'viewTransaction')->name('transaction_datavalue');
+        Route::get('/export_ranking', 'exportRanking')->name('export.ranking');
+    });
 });
