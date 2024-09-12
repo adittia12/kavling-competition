@@ -16,6 +16,7 @@
 
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+    @yield('style')
 </head>
 
 <body>
@@ -48,11 +49,17 @@
                                     </li>
                                     <li><a class="dropdown-item" href="{{ route('kavling.index') }}">Data Kavling</a>
                                     </li>
+                                    <li><a class="dropdown-item" href="{{ route('transaction_datavalue') }}">Data
+                                            Transaksi</a>
+                                    </li>
                                 </ul>
                             </div>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Transaction Data</a>
+                            <a class="nav-link" href="{{ route('transaction.index') }}">Transaction Data</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('display_peringkat') }}">Rank Kavling</a>
                         </li>
                     </ul>
 

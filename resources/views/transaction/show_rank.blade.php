@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Kavling Ranking')
+@section('title', 'Ranking Fix')
 
 @section('style')
     <style>
@@ -19,6 +19,9 @@
             color: white;
             border-radius: 12px 12px 0 0;
             padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .ranking-title {
@@ -110,6 +113,27 @@
             background-color: #2575fc;
             border-color: #2575fc;
         }
+
+        .btn-export {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-export:hover {
+            background-color: #218838;
+            color: white;
+        }
+
+        .btn-export i {
+            margin-right: 8px;
+        }
     </style>
 @endsection
 
@@ -119,7 +143,11 @@
             <div class="col-md-10">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="ranking-title">Peringkat Mini Garden</h4>
+                        <h4 class="ranking-title">Peringkat Kavling Result</h4>
+                        <!-- Tombol Export Data -->
+                        <a href="{{ route('export.ranking') }}" class="btn btn-export">
+                            <i class="fas fa-file-export"></i> Export Data
+                        </a>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -128,8 +156,9 @@
                                     <tr>
                                         <th>Rank</th>
                                         <th>Kavling</th>
-                                        @foreach ($directors as $director)
-                                            <th>{{ $director->name }}</th>
+                                        <!-- Tampilkan parameter -->
+                                        @foreach ($parameters as $parameter)
+                                            <th>{{ $parameter->name_parameter }}</th>
                                         @endforeach
                                         <th>Total Nilai</th>
                                     </tr>
@@ -138,16 +167,18 @@
                                     @forelse ($rankingData as $rank => $data)
                                         <tr
                                             class="
-                                            {{ $rank < 3 ? 'rank-1-3' : '' }}
-                                            {{ $rank >= 3 && $rank < 5 ? 'rank-4-5' : '' }}
-                                            {{ $rank >= 5 && $rank < 10 ? 'rank-6-10' : '' }}
-                                        ">
+                                        {{ $rank < 3 ? 'rank-1-3' : '' }}
+                                        {{ $rank >= 3 && $rank < 5 ? 'rank-4-5' : '' }}
+                                        {{ $rank >= 5 && $rank < 10 ? 'rank-6-10' : '' }}
+                                    ">
                                             <td>{{ $rank + 1 }}</td>
                                             <td>{{ $data['kavling'] }}</td>
 
-                                            <!-- Menampilkan nilai dari setiap direksi -->
-                                            @foreach ($directors as $director)
-                                                <td>{{ $data['nilai_per_direksi'][$director->name] ?? '0' }}</td>
+                                            <!-- Tampilkan nilai berdasarkan parameter -->
+                                            @foreach ($parameters as $parameter)
+                                                <td>
+                                                    {{ $data['nilai_per_parameter'][$parameter->name_parameter] ?? '0' }}
+                                                </td>
                                             @endforeach
 
                                             <!-- Total nilai untuk kavling -->
@@ -155,7 +186,7 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="{{ 3 + $directors->count() }}" class="text-center empty-row">Belum
+                                            <td colspan="{{ 3 + $parameters->count() }}" class="text-center empty-row">Belum
                                                 ada data nilai.</td>
                                         </tr>
                                     @endforelse
