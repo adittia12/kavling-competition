@@ -24,6 +24,14 @@ class TransactionValueController extends Controller
         $kavlings = Kavlings::all();
         $directors = Directors::all(); // Ambil semua direksi
 
+        // Definisikan bobot untuk masing-masing parameter
+        $bobot = [
+            'Sustainable' => 0.15,
+            '3R' => 0.30,
+            'Estetika' => 0.25,
+            'Vidio' => 0.30,
+        ];
+
         // Array untuk menyimpan nilai dan total per kavling
         $rankingData = [];
 
@@ -33,22 +41,36 @@ class TransactionValueController extends Controller
 
             foreach ($directors as $director) {
                 // Ambil nilai yang diberikan oleh setiap direksi untuk kavling ini
-                $nilai = TransactionValues::where('id_kavling', $kavling->id)
-                    ->where('id_direction', $director->id)
-                    ->sum('value');
+                $nilaiPerParameter = [];
 
-                // Tambahkan nilai direksi ke array nilai per direksi
-                $nilaiPerDireksi[$director->name] = $nilai;
+                foreach ($bobot as $parameterName => $bobotParameter) {
+                    // Dapatkan nilai dari tabel berdasarkan parameter dan direksi
+                    $nilai = TransactionValues::where('id_kavling', $kavling->id)
+                        ->where('id_direction', $director->id)
+                        ->whereHas('parameter', function ($query) use ($parameterName) {
+                            $query->where('name_parameter', $parameterName);
+                        })
+                        ->sum('value');
 
-                // Tambahkan ke total nilai
-                $totalNilai += $nilai;
+                    // Kalikan nilai dengan bobot parameter
+                    $nilaiDenganBobot = $nilai * $bobotParameter;
+
+                    // Simpan nilai berdasarkan parameter yang dinilai
+                    $nilaiPerParameter[$parameterName] = $nilaiDenganBobot;
+
+                    // Tambahkan nilai ke total nilai keseluruhan
+                    $totalNilai += $nilaiDenganBobot;
+                }
+
+                // Tambahkan nilai per direksi
+                $nilaiPerDireksi[$director->name] = $nilaiPerParameter;
             }
 
             // Simpan data kavling, nilai per direksi, dan total nilai
             $rankingData[] = [
                 'kavling' => $kavling->name_kavling,
                 'nilai_per_direksi' => $nilaiPerDireksi,
-                'total_nilai' => $totalNilai,
+                'total_nilai' => round($totalNilai), // Bulatkan nilai total
             ];
         }
 
@@ -57,8 +79,9 @@ class TransactionValueController extends Controller
             return $b['total_nilai'] - $a['total_nilai']; // Urutkan descending
         });
 
-        return view('transaction.index', compact('rankingData', 'directors'));
+        return view('transaction.index', compact('rankingData', 'directors', 'bobot'));
     }
+
 
     public function displayRank()
     {
@@ -66,6 +89,14 @@ class TransactionValueController extends Controller
         $kavlings = Kavlings::all();
         $parameters = ValueParameters::all(); // Ambil semua parameter
         $directors = Directors::all(); // Ambil semua direksi
+
+        // Definisikan bobot untuk masing-masing parameter
+        $bobot = [
+            'Sustainable' => 0.15,
+            '3R' => 0.30,
+            'Estetika' => 0.25,
+            'Vidio' => 0.30,
+        ];
 
         // Array untuk menyimpan nilai dan total per kavling
         $rankingData = [];
@@ -85,17 +116,20 @@ class TransactionValueController extends Controller
                         ->where('id_parameter', $parameter->id)
                         ->sum('value'); // Menghitung total nilai untuk setiap parameter
 
+                    // Kalikan nilai dengan bobot parameter
+                    $nilaiDenganBobot = $nilai * ($bobot[$parameter->name_parameter] ?? 1);
+
                     // Simpan nilai untuk setiap parameter yang dinilai oleh direksi
-                    $nilaiPerDireksi[$parameter->name_parameter][$director->name] = $nilai;
+                    $nilaiPerDireksi[$parameter->name_parameter][$director->name] = $nilaiDenganBobot;
 
                     // Tambahkan ke total nilai untuk parameter ini
                     if (!isset($nilaiPerParameter[$parameter->name_parameter])) {
                         $nilaiPerParameter[$parameter->name_parameter] = 0;
                     }
-                    $nilaiPerParameter[$parameter->name_parameter] += $nilai;
+                    $nilaiPerParameter[$parameter->name_parameter] += $nilaiDenganBobot;
 
                     // Tambahkan ke total nilai keseluruhan untuk kavling ini
-                    $totalNilai += $nilai;
+                    $totalNilai += $nilaiDenganBobot;
                 }
             }
 
@@ -104,7 +138,7 @@ class TransactionValueController extends Controller
                 'kavling' => $kavling->name_kavling,
                 'nilai_per_direksi' => $nilaiPerDireksi,
                 'nilai_per_parameter' => $nilaiPerParameter,
-                'total_nilai' => $totalNilai,
+                'total_nilai' => round($totalNilai), // Bulatkan nilai total
             ];
         }
 
@@ -115,7 +149,6 @@ class TransactionValueController extends Controller
 
         return view('transaction.show_rank', compact('rankingData', 'directors', 'parameters'));
     }
-
 
     public function viewTransaction()
     {

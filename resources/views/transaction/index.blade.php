@@ -145,13 +145,15 @@
                                             <td>{{ $rank + 1 }}</td>
                                             <td>{{ $data['kavling'] }}</td>
 
-                                            <!-- Menampilkan nilai dari setiap direksi -->
+                                            <!-- Menampilkan total nilai dari setiap direksi -->
                                             @foreach ($directors as $director)
-                                                <td>{{ $data['nilai_per_direksi'][$director->name] ?? '0' }}</td>
+                                                <td>
+                                                    {{ number_format(array_sum($data['nilai_per_direksi'][$director->name] ?? []), 0) }}
+                                                </td>
                                             @endforeach
 
-                                            <!-- Total nilai untuk kavling -->
-                                            <td class="total-column">{{ $data['total_nilai'] }}</td>
+                                            <!-- Total nilai keseluruhan untuk kavling -->
+                                            <td class="total-column">{{ number_format($data['total_nilai'], 0) }}</td>
                                         </tr>
                                     @empty
                                         <tr>

@@ -119,7 +119,8 @@
                                 @if ($nilaiPerKavling[$item->id]['dinilai'])
                                     <!-- Jika sudah dinilai, tampilkan total nilai -->
                                     <p class="card-text text-white fw-bold">Total Poin:
-                                        {{ $nilaiPerKavling[$item->id]['total_nilai'] }}</p>
+                                        {{ number_format($nilaiPerKavling[$item->id]['total_nilai'], 0) }}
+                                    </p>
                                 @else
                                     <!-- Jika belum dinilai sepenuhnya, tampilkan informasi -->
                                     <p class="card-text text-warning">Belum semua parameter dinilai</p>

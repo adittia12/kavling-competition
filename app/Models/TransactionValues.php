@@ -22,4 +22,9 @@ class TransactionValues extends Model
         'created_at',
         'updated_at'
     ];
+
+    public function parameter()
+    {
+        return $this->belongsTo(ValueParameters::class, 'id_parameter');
+    }
 }
