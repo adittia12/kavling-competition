@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Master;
 use App\Http\Controllers\Controller;
 use App\Models\Kavlings;
 use Illuminate\Http\Request;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class KavlingController extends Controller
 {
@@ -25,7 +26,7 @@ class KavlingController extends Controller
      */
     public function create()
     {
-        //
+        return view('master.kavling.create');
     }
 
     /**
@@ -33,7 +34,19 @@ class KavlingController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name_kavling' => 'required'
+        ]);
+
+        $check = Kavlings::create($request->all());
+
+        if ($check) {
+            Alert::success('Berhasil', 'Data berhasil ditamabh');
+            return redirect()->route('kavling.index');
+        } else {
+            Alert::error('Gagal', 'Data gagal ditambah');
+            return redirect()->back();
+        }
     }
 
     /**
@@ -63,8 +76,17 @@ class KavlingController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Kavlings $kavlings)
+    public function destroy($kavling)
     {
-        //
+        $check = Kavlings::where('id', $kavling)->first();
+        $check->delete();
+
+        if ($check) {
+            Alert::success('Berhasil', 'Data berhasil dihapus');
+            return redirect()->back();
+        } else {
+            Alert::error('Gagal', 'Data gagal dihapus');
+            return redirect()->back();
+        }
     }
 }

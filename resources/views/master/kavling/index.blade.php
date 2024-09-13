@@ -14,9 +14,9 @@
                             <div class="col">
                                 <h4>Data Kavling</h4>
                             </div>
-                            {{-- <div class="col">
+                            <div class="col">
                                 <a href="{{ route('kavling.create') }}" class="btn btn-success">Add Data</a>
-                            </div> --}}
+                            </div>
                         </div>
                     </div>
                     <div class="card-body">
@@ -41,19 +41,17 @@
                                             {{ $kavlingData->perPage() * ($kavlingData->currentPage() - 1) + $index + 1 }}
                                         </th>
                                         <td>{{ $item->name_kavling }}</td>
-                                        {{-- <td>
-                                            <form action="{{ route('kavling.destroy', Crypt::encrypt($item->id)) }}"
-                                                method="POST">
+                                        <td>
+                                            <form action="{{ route('kavling.destroy', $item->id) }}" method="POST">
                                                 @csrf
                                                 @method('DELETE')
-                                                <a href="{{ route('kavling.edit', Crypt::encrypt($item->id)) }}"
-                                                    class="btn btn-primary btn-sm">Edit</a>
+                                                {{-- <a href="{{ route('kavling.edit', Crypt::encrypt($item->id)) }}"
+                                                    class="btn btn-primary btn-sm">Edit</a> --}}
                                                 <button type="button" class="btn btn-danger btn-sm delete-button"
-                                                    data-id-group="{{ Crypt::encrypt($item->id) }}"><i
-                                                        class="bi bi-trash"></i>
+                                                    data-id-group="{{ $item->id }}"><i class="bi bi-trash"></i>
                                                     Delete</button>
                                             </form>
-                                        </td> --}}
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -75,7 +73,7 @@
                     const id = button.getAttribute('data-id-group');
                     Swal.fire({
                         title: 'Delete Confirmation',
-                        text: 'Do you want to delete this group?',
+                        text: 'Do you want to delete this kavling?',
                         icon: 'warning',
                         showCancelButton: true,
                         confirmButtonText: 'Delete',
