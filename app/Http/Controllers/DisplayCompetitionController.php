@@ -25,16 +25,38 @@ class DisplayCompetitionController extends Controller
         // Buat array untuk menyimpan total nilai setiap kavling
         $nilaiPerKavling = [];
 
-        foreach ($dataKavling as $kavling) {
-            // Hitung total nilai yang diberikan untuk kavling ini oleh direksi
-            $totalNilai = TransactionValues::where('id_kavling', $kavling->id)
-                ->where('id_direction', $id) // Berdasarkan direksi
-                ->sum('value'); // Hitung jumlah nilai
+        // Definisikan bobot untuk masing-masing parameter
+        $bobot = [
+            'Sustainable' => 0.15,
+            '3R' => 0.30,
+            'Estetika' => 0.25,
+        ];
 
-            // Hitung jumlah parameter yang sudah dinilai
-            $jumlahParameterDinilai = TransactionValues::where('id_kavling', $kavling->id)
-                ->where('id_direction', $id)
-                ->count();
+        foreach ($dataKavling as $kavling) {
+            // Inisialisasi total nilai
+            $totalNilai = 0;
+            $jumlahParameterDinilai = 0;
+
+            // Dapatkan nilai untuk setiap parameter dan hitung berdasarkan bobot
+            foreach ($bobot as $parameterName => $bobotParameter) {
+                $nilai = TransactionValues::where('id_kavling', $kavling->id)
+                    ->where('id_direction', $id)
+                    ->whereHas('parameter', function($query) use ($parameterName) {
+                        $query->where('name_parameter', $parameterName);
+                    })
+                    ->sum('value');
+
+                // Tambahkan nilai ke total nilai setelah dikalikan dengan bobot
+                $totalNilai += $nilai * $bobotParameter;
+
+                // Hitung jumlah parameter yang dinilai
+                if ($nilai > 0) {
+                    $jumlahParameterDinilai++;
+                }
+            }
+
+            // Bulatkan total nilai ke bilangan bulat terdekat
+            $totalNilai = round($totalNilai);
 
             // Simpan total nilai dan status apakah semua parameter sudah dinilai atau belum
             $nilaiPerKavling[$kavling->id] = [
@@ -45,6 +67,7 @@ class DisplayCompetitionController extends Controller
 
         return view('competition.display_kavling', compact(['dataKavling', 'dataDireksi', 'nilaiPerKavling']));
     }
+
 
     public function displayPenilaian($id_kavling, $id_direksi)
     {
