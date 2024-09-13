@@ -178,9 +178,15 @@
                                     {{ old('values.' . $parameter->id) === null ? 'selected' : '' }}>Pilih nilai</option>
                                 <option value="70" {{ old('values.' . $parameter->id) == 70 ? 'selected' : '' }}>70
                                 </option>
+                                <option value="75" {{ old('values.' . $parameter->id) == 75 ? 'selected' : '' }}>75
+                                </option>
                                 <option value="80" {{ old('values.' . $parameter->id) == 80 ? 'selected' : '' }}>80
                                 </option>
+                                <option value="85" {{ old('values.' . $parameter->id) == 85 ? 'selected' : '' }}>85
+                                </option>
                                 <option value="90" {{ old('values.' . $parameter->id) == 90 ? 'selected' : '' }}>90
+                                </option>
+                                <option value="95" {{ old('values.' . $parameter->id) == 95 ? 'selected' : '' }}>95
                                 </option>
                                 <option value="100" {{ old('values.' . $parameter->id) == 100 ? 'selected' : '' }}>100
                                 </option>
