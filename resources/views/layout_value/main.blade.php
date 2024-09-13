@@ -23,17 +23,95 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
+            flex-wrap: nowrap;
+            /* Agar tidak wrap secara default */
+        }
+
+        .logo-card img {
+            height: auto;
+            width: 100%;
+            /* Agar gambar menyesuaikan lebar container */
+            max-width: 100%;
+            object-fit: contain;
+            /* Menjaga keseluruhan gambar terlihat tanpa terpotong */
         }
 
         .logo-card {
-            background-color: rgb(255, 255, 255);
-            border-radius: 12px;
             padding: 10px;
+            background-color: #fff;
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-bottom: 10px;
+            border-radius: 12px;
+            overflow: hidden;
+            /* Pastikan gambar tidak keluar dari batas */
+        }
+
+        /* Media Query untuk Tablet */
+        @media (max-width: 1024px) {
+            .header {
+                justify-content: center;
+                /* Atur agar logo dan teks tetap di tengah */
+                flex-wrap: wrap;
+                /* Izinkan wrap jika layar terlalu kecil */
+            }
+
+            .logo-card img {
+                height: 40px;
+                /* Kurangi ukuran logo untuk tablet */
+            }
+
+            .header h3 {
+                font-size: 20px;
+                margin: 10px 0;
+                /* Beri jarak vertikal pada teks */
+            }
+        }
+
+        /* Media Query untuk Mobile */
+        @media (max-width: 768px) {
+            .header {
+                justify-content: center;
+                /* Atur semua konten ke tengah */
+                flex-direction: column;
+                /* Susun logo dan teks secara vertikal */
+            }
+
+            .logo-card {
+                margin-bottom: 15px;
+                /* Beri jarak lebih antara logo */
+            }
+
+            .logo-card img {
+                height: 35px;
+                /* Sesuaikan ukuran logo untuk mobile */
+            }
+
+            .header h3 {
+                font-size: 18px;
+                /* Sesuaikan ukuran teks */
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .logo-card img {
+                max-width: 80%;
+                /* Sesuaikan ukuran logo di tablet */
+                height: auto;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .logo-card img {
+                max-width: 70%;
+                /* Sesuaikan ukuran logo di mobile */
+                height: auto;
+            }
+        }
+
+        .logo-card {
+            padding: 10px 20px;
+            /* Berikan ruang lebih untuk logo */
         }
 
         .logo-card img {
@@ -83,7 +161,7 @@
                     <div class="logo-card d-none d-md-flex">
                         <img src="{{ asset('assets/img/logo-bumn.png') }}" alt="BUMN Logo">
                     </div>
-                    <h1 class="mx-3">Penjurian Mini Garden</h1>
+                    <h3 class="mx-3">Judging of Sustainable Garden Competition</h3>
                     <div class="logo-card d-none d-md-flex">
                         <!-- Logo Peruri -->
                         <img src="{{ asset('assets/img/logo-dark.png') }}" alt="Peruri Logo">
