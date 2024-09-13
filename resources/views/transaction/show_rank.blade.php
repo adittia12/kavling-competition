@@ -167,22 +167,22 @@
                                     @forelse ($rankingData as $rank => $data)
                                         <tr
                                             class="
-                                        {{ $rank < 3 ? 'rank-1-3' : '' }}
-                                        {{ $rank >= 3 && $rank < 5 ? 'rank-4-5' : '' }}
-                                        {{ $rank >= 5 && $rank < 10 ? 'rank-6-10' : '' }}
-                                    ">
+                                            {{ $rank < 3 ? 'rank-1-3' : '' }}
+                                            {{ $rank >= 3 && $rank < 5 ? 'rank-4-5' : '' }}
+                                            {{ $rank >= 5 && $rank < 10 ? 'rank-6-10' : '' }}
+                                        ">
                                             <td>{{ $rank + 1 }}</td>
                                             <td>{{ $data['kavling'] }}</td>
 
                                             <!-- Tampilkan nilai berdasarkan parameter -->
                                             @foreach ($parameters as $parameter)
                                                 <td>
-                                                    {{ $data['nilai_per_parameter'][$parameter->name_parameter] ?? '0' }}
+                                                    {{ number_format($data['nilai_per_parameter'][$parameter->name_parameter] ?? 0, 0) }}
                                                 </td>
                                             @endforeach
 
                                             <!-- Total nilai untuk kavling -->
-                                            <td class="total-column">{{ $data['total_nilai'] }}</td>
+                                            <td class="total-column">{{ number_format($data['total_nilai'], 0) }}</td>
                                         </tr>
                                     @empty
                                         <tr>

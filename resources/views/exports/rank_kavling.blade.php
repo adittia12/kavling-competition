@@ -15,9 +15,9 @@
                 <td>{{ $rank + 1 }}</td>
                 <td>{{ $data['kavling'] }}</td>
                 @foreach ($parameters as $parameter)
-                    <td>{{ $data['nilai_per_parameter'][$parameter->name_parameter] ?? 0 }}</td>
+                    <td>{{ number_format($data['nilai_per_parameter'][$parameter->name_parameter] ?? 0, 0) }}</td>
                 @endforeach
-                <td>{{ $data['total_nilai'] }}</td>
+                <td>{{ number_format($data['total_nilai'], 0) }}</td>
             </tr>
         @endforeach
     </tbody>
