@@ -27,6 +27,8 @@ Route::controller(DisplayCompetitionController::class)->group(function() {
     Route::get('/display_kavling/{id}', 'displayKavling')->name('kavling_data');
     Route::get('/penilaian_kavling/{id_kavling}/{id_direksi}', 'displayPenilaian')->name('penilaian_garden');
     Route::post('store_penilaian/{dir_id}', 'storePenilaian')->name('store_value');
+    Route::get('/penilaian/edit/{id_kavling}/{id_direksi}','editPenilaian')->name('edit_penilaian_garden');
+    Route::post('/penilaian/update/{id_kavling}/{id_direksi}', 'updatePenilaian')->name('update_penilaian_garden');
 });
 
 Auth::routes();

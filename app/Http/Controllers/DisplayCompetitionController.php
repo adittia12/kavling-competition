@@ -118,6 +118,43 @@ class DisplayCompetitionController extends Controller
         return redirect()->route('kavling_data', ['id' => $dir_id]);
     }
 
+    public function editPenilaian($id_kavling, $id_direksi)
+    {
+        $kavling = Kavlings::findOrFail($id_kavling);
+        $direksi = Directors::findOrFail($id_direksi);
+        $parameters = ValueParameters::select('*')->limit(3)->get();
 
+        // Ambil nilai yang sudah ada
+        $nilaiPerParameter = TransactionValues::where('id_kavling', $id_kavling)
+            ->where('id_direction', $id_direksi)
+            ->pluck('value', 'id_parameter')
+            ->toArray();
+
+        return view('competition.display_edit_penilaian', data: compact('kavling', 'direksi', 'parameters', 'nilaiPerParameter'));
+    }
+
+
+    public function updatePenilaian(Request $request, $id_kavling, $id_direksi)
+    {
+        $request->validate([
+            'values.*' => 'required|numeric|min:70|max:100',
+        ]);
+
+        try {
+            foreach ($request->values as $parameter_id => $value) {
+                // Update atau buat nilai baru jika belum ada
+                TransactionValues::updateOrCreate(
+                    ['id_kavling' => $id_kavling, 'id_direction' => $id_direksi, 'id_parameter' => $parameter_id],
+                    ['value' => $value]
+                );
+            }
+
+            Alert::success('success', 'Penilaian berhasil diupdate!');
+            return redirect()->route('kavling_data', ['id' => $id_direksi]);
+        } catch (\Exception $e) {
+            Alert::error('error', 'Gagal memperbarui penilaian.');
+            return redirect()->back();
+        }
+    }
 
 }
