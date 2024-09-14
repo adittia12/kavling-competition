@@ -1,7 +1,6 @@
 @extends('layout_value.main')
-@section('title')
-    Penilaian Mini Garden
-@endsection
+@section('title', 'Edit Penilaian Mini Garden')
+
 @section('style')
     <style>
         /* Global stylish font */
@@ -106,6 +105,7 @@
         }
     </style>
 @endsection
+
 @section('content')
     <div class="container mt-5">
         <!-- Tombol Back ke halaman daftar kavling -->
@@ -116,11 +116,12 @@
                     <a href="{{ route('kavling_data', ['id' => $direksi->id]) }}" class="btn btn-outline-secondary">
                         <i class="fas fa-arrow-left"></i> Kembali
                     </a>
-                    <!-- Judul Form Penjurian -->
-                    <h3 class="stylish-text">Form Penjurian Kavling</h3>
+                    <!-- Judul Form Edit Penjurian -->
+                    <h3 class="stylish-text">Edit Penilaian Kavling</h3>
                 </div>
             </div>
         </div>
+
         <!-- Card Info Direksi dan Kavling -->
         <div class="row justify-content-center mb-2">
             <div class="col-md-8 text-center">
@@ -145,20 +146,20 @@
             </div>
         </div>
 
-        <!-- Form Penilaian -->
+        <!-- Form Edit Penilaian -->
         <div class="row justify-content-center mb-5">
             <div class="col-md-8">
-                <form action="{{ route('store_value', ['dir_id' => $direksi->id]) }}" method="POST" class="form-modern">
+                <form
+                    action="{{ route('update_penilaian_garden', ['id_kavling' => $kavling->id, 'id_direksi' => $direksi->id]) }}"
+                    method="POST" class="form-modern">
                     @csrf
-                    <input type="hidden" name="kavling_id" value="{{ $kavling->id }}">
-                    <input type="hidden" name="direksi_id" value="{{ $direksi->id }}">
 
                     <!-- Menampilkan parameter penilaian -->
                     @foreach ($parameters as $parameter)
                         <div class="mb-4">
                             <label for="parameter_{{ $parameter->id }}"
                                 class="form-label stylish-text">{{ $parameter->name_parameter }}</label>
-
+                            <!-- Tambahkan deskripsi sesuai parameter -->
                             <!-- Menambahkan deskripsi di bawah label berdasarkan nama parameter -->
                             @if (str_contains(strtolower($parameter->name_parameter), '3r'))
                                 <p class="text-muted">3R (Reduce, Reuse, Recycle): Mengurangi penggunaan, menggunakan
@@ -175,28 +176,16 @@
                                     tanaman, bunga, dan elemen dekoratif yang digunakan dalam taman, Konsep lanskap dan
                                     arsitektur taman yang saling berintegrasi.</p>
                             @endif
-
                             <!-- Dropdown nilai penilaian -->
                             <select class="form-control @error('values.' . $parameter->id) is-invalid @enderror"
                                 id="parameter_{{ $parameter->id }}" name="values[{{ $parameter->id }}]">
-                                <option value="" disabled
-                                    {{ old('values.' . $parameter->id) === null ? 'selected' : '' }}>Pilih nilai</option>
-                                <option value="70" {{ old('values.' . $parameter->id) == 70 ? 'selected' : '' }}>70
-                                </option>
-                                <option value="75" {{ old('values.' . $parameter->id) == 75 ? 'selected' : '' }}>75
-                                </option>
-                                <option value="80" {{ old('values.' . $parameter->id) == 80 ? 'selected' : '' }}>80
-                                </option>
-                                <option value="85" {{ old('values.' . $parameter->id) == 85 ? 'selected' : '' }}>85
-                                </option>
-                                <option value="90" {{ old('values.' . $parameter->id) == 90 ? 'selected' : '' }}>90
-                                </option>
-                                <option value="95" {{ old('values.' . $parameter->id) == 95 ? 'selected' : '' }}>95
-                                </option>
-                                <option value="100" {{ old('values.' . $parameter->id) == 100 ? 'selected' : '' }}>100
-                                </option>
+                                <option value="" disabled>Pilih nilai</option>
+                                @for ($i = 70; $i <= 100; $i += 5)
+                                    <option value="{{ $i }}"
+                                        {{ old('values.' . $parameter->id, $nilaiPerParameter[$parameter->id] ?? '') == $i ? 'selected' : '' }}>
+                                        {{ $i }}</option>
+                                @endfor
                             </select>
-
                             @error('values.' . $parameter->id)
                                 <span class="text-danger text-sm">{{ $message }}</span>
                             @enderror
@@ -205,16 +194,16 @@
 
                     <!-- Tombol Submit -->
                     <div class="d-grid">
-                        <button type="submit" class="btn btn-primary btn-lg">Simpan Penilaian</button>
+                        <button type="submit" class="btn btn-primary btn-lg">Update Penilaian</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-    </div>
 @endsection
 
 @section('script')
+    <!-- Script untuk alert error -->
     <script>
         @if ($errors->any())
             let errorMessages = '';
@@ -223,7 +212,7 @@
             @endforeach
             Swal.fire({
                 title: 'Error!',
-                html: errorMessages, // Tampilkan pesan error dalam format HTML
+                html: errorMessages,
                 icon: 'error',
                 confirmButtonText: 'OK'
             });
