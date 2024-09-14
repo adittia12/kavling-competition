@@ -114,7 +114,6 @@
                         <div class="card-body d-flex flex-column justify-content-between">
                             <div class="text-center mb-4">
                                 <h5 class="card-title text-white fw-bold">{{ $item->name_kavling }}</h5>
-                                <p class="card-text text-white-50">Data Kavling</p>
 
                                 @if ($nilaiPerKavling[$item->id]['dinilai'])
                                     <!-- Jika sudah dinilai, tampilkan total nilai -->
@@ -134,8 +133,9 @@
                                         Penjurian
                                     </a>
                                 @else
-                                    <!-- Jika sudah dinilai, tidak perlu tombol -->
-                                    <a href="#" class="btn btn-secondary fw-bold disabled">Sudah Dinilai</a>
+                                    <!-- Tambahkan tombol Edit jika sudah dinilai -->
+                                    <a href="{{ route('edit_penilaian_garden', ['id_kavling' => $item->id, 'id_direksi' => $dataDireksi->id]) }}"
+                                        class="btn btn-warning fw-bold">Edit</a>
                                 @endif
                             </div>
                         </div>

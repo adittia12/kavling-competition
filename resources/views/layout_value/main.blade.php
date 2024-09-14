@@ -149,6 +149,43 @@
         .text-primary-custom {
             color: #4b0082;
         }
+
+        /* Footer Styles */
+        footer {
+            background-color: #0c206b;
+            /* Dark blue background */
+            color: #ffffff;
+            /* White text */
+            padding: 20px 0;
+            /* Top and bottom padding */
+            border-top: 4px solid #4b0082;
+            /* Top border in indigo color */
+            text-align: center;
+            /* Center the text */
+            font-size: 16px;
+            /* Adjust font size */
+            position: relative;
+            /* To position elements inside */
+        }
+
+        footer p {
+            margin: 0;
+            /* Remove default margin */
+        }
+
+        footer a {
+            color: #ffffff;
+            /* Make links white */
+            text-decoration: underline;
+            /* Underline the links */
+        }
+
+        footer a:hover {
+            color: #ffcc00;
+            /* Change color on hover */
+            text-decoration: none;
+            /* Remove underline on hover */
+        }
     </style>
     @yield('style')
 </head>
@@ -178,6 +215,12 @@
             @yield('content')
         </section>
     </div>
+
+    <!-- Footer -->
+    <footer class="text-center mt-4">
+        <p>Developed by <a href="https://adittia12.github.io/my-portfolio/" target="_blank">AA_12</a></p>
+    </footer>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
